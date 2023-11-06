@@ -2,6 +2,7 @@
 
 use App\Services\PusherEvents;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/test', function () {
+Route::post('login', [AuthController::class, 'login']);
 
-});
+Route::get('logout', [AuthController::class, 'logout']);
 
 
 Route::get('/', function () {

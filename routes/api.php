@@ -3,7 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
+use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\AuthController;
 use App\Models\Member;
+use App\Http\Controllers\MembersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,20 +23,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('members', function(){
+Route::get('members', [MembersController::class, 'index'])->middleware('auth:sanctum');
 
-    $query = Member::where('id', '>', 0);
+Route::get('members/{member}', [MembersController::class, 'show'])->middleware('auth:sanctum');
 
-    if(\request()->has('search')) {
-        $searchStr = \request()->get('search');
-        $query = $query->where('first_name', 'like', "%{$searchStr}%");
-    }
+Route::put('members/{member}', [MembersController::class, 'update']);//->middleware('auth:sanctum');
 
-    return $query->paginate(10);
-});
+Route::delete('members/{member}', [MembersController::class, 'delete'])->middleware('auth:sanctum');
 
-Route::post('pictures', [ApiController::class, 'upload']);
+Route::post('images', [ImagesController::class, 'create'])->middleware('auth:sanctum');
 
-Route::get('pictures', [ApiController::class, 'fetchUploadedPicture']);
+Route::get('images', [ImagesController::class, 'index'])->middleware('auth:sanctum');
 
-Route::delete('pictures/{upload}', [ApiController::class, 'delete']);
+Route::delete('images/{image}', [ImagesController::class, 'delete'])->middleware('auth:sanctum');
